@@ -17,6 +17,8 @@ import './style.css';
 import { useNavigate } from 'react-router';
 import apiConfig from '../../../../API/apiConfig';
 import useCurrentBg from '../../../../hooks/useCurrentBg';
+import toast from 'react-hot-toast';
+
 
 const HeroSlide = () => {
     const {currentBg} = useCurrentBg()
@@ -91,11 +93,11 @@ const HeroSlideItem = props => {
         if (videos.results.length > 0) {
             const videSrc = 'https://www.youtube.com/embed/' + videos.results[0].key;
             modal.querySelector('.modal__content > iframe').setAttribute('src', videSrc);
+            modal.classList.toggle('active');
         } else {
-            modal.querySelector('.modal__content').innerHTML = 'No trailer';
+            toast.error('No Trailer')
         }
 
-        modal.classList.toggle('active');
     }
 
     return (
@@ -128,13 +130,18 @@ const TrailerModal = props => {
     const item = props.item;
 
     const iframeRef = useRef(null);
-
+    
     const onClose = () => iframeRef.current.setAttribute('src', '');
+    
+
+
+
 
     return (
-        <Modal active={false} id={`modal_${item.id}`}>
+        <Modal  active={false} id={`modal_${item.id}`} >
             <ModalContent onClose={onClose}>
                 <iframe ref={iframeRef} width="100%" height="500px" title="trailer"></iframe>
+            
             </ModalContent>
         </Modal>
     )
